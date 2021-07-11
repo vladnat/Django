@@ -1,0 +1,15 @@
+{%extends 'flatpages/default.html' %}
+
+{% block title %}
+Authors
+{% endblock title %}
+
+
+{% block content %}
+    <h1>Авторы</h1>
+<p style="text-align: left;">
+{% for author in authors %}
+    {{ author.author_user }}<br>
+{% endfor %}</p>
+
+{% endblock content %}

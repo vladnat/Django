@@ -1,12 +1,70 @@
-from django.shortcuts import render
+from django.shortcuts import render, reverse, redirect
+from django.template.loader import render_to_string
+from django.views import View
 from django.views.generic import ListView, UpdateView, CreateView, DetailView, DeleteView
 from django.core.paginator import Paginator
-from .models import Post, Category
+from .models import Author, Post, User, Category
+from datetime import datetime
 from .filter import PostFilter
-from .forms import PostForm  # импортируем нашу форму
-
+from .forms import PostForm, CategoryForm  # импортируем нашу форму
+from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.core.mail import EmailMultiAlternatives, mail_admins, send_mail
+
+
+class CategoryAdd(CreateView):
+    template_name = 'subscribe.html'
+    model = Category
+    queryset = Post.objects.all()
+    form_class = CategoryForm
+
+
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
+        id = self.kwargs.get('pk')
+        Category.objects.get(pk=id).subscribers.add(user)
+        return redirect('/')
+
+
+class CategoryRemove(CreateView):
+    template_name = 'unsubscribe.html'
+    model = Category
+    queryset = Category.objects.all()
+    form_class = CategoryForm
+
+
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
+        id = self.kwargs.get('pk')
+        Category.objects.get(pk=id).subscribers.remove(user)
+        return redirect('/')
+
+
+class AuthorsList(ListView):
+    model = Author
+    template_name = 'authors.html'
+    context_object_name = 'authors'
+    queryset = Author.objects.order_by('-id')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        return context
+
+class AuthorDetail(DetailView):
+    model = Author
+    template_name = 'author.html'
+    context_object_name = 'author'
+    queryset = Author.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        id = self.kwargs.get('pk')
+        user = self.request.user
+        context['author'] = Author.objects.get(pk=id).author_user.all()
+        return context
 
 
 class Posts(ListView):
@@ -14,10 +72,13 @@ class Posts(ListView):
     template_name = 'news.html'
     context_object_name = 'news'
     ordering = ['-date_creation']
+    queryset = Post.objects.all()
     paginate_by = 3  # поставим постраничный вывод в один элемент
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['is_not_author'] = not self.request.user.groups.filter(name='authors').exists()
+
         return context
 
 
@@ -25,7 +86,16 @@ class Posts(ListView):
 class PostDetailView(DetailView):
     model = Post
     template_name = 'news/post.html'
+    context_object_name = 'post'
     queryset = Post.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        id = self.kwargs.get('pk')
+        user = self.request.user
+        context['post_categories'] = Post.objects.get(pk=id).post_category.all()
+        context['user_categories'] = Category.objects.filter(subscribers=User.objects.get(username=str(user)))
+        return context
 
 
 class SearchPost(ListView):

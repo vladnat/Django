@@ -25,6 +25,9 @@ class Author(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=64, unique=True)
+    subscribers = models.ManyToManyField(User, blank=True, null=True,
+                                         related_name='subscription',
+                                         verbose_name='Подписчики')
 
     def __str__(self):
         return f'{self.name}'
@@ -58,7 +61,7 @@ class Post(models.Model):
         return self.text[:124] + '...'  # лучше исп форматирование для экономии памяти
 
     def __str__(self):
-        return f'{self.title} | {self.author} | {self.date_creation} | {self.preview()}'
+        return f'{self.title} | {self.author} | {self.post_category.all()} | {self.date_creation} | {self.preview()} | {self.rating}'
 
     def get_absolute_url(self):  # добавим абсолютный путь, чтобы после создания нас перебрасывало на страницу с товаром
         return f'/news/{self.id}'
@@ -67,6 +70,9 @@ class Post(models.Model):
 class PostCategory(models.Model):
     post_through = models.ForeignKey(Post, on_delete=models.CASCADE)
     category_through = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.category_through}'
 
 
 class Comment(models.Model):
