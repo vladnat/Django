@@ -3,7 +3,7 @@ from django.views.generic import ListView, UpdateView, CreateView, DetailView, D
 from django.core.paginator import Paginator
 from .models import Post, Category
 from .filter import PostFilter
-from forms import PostForm  # импортируем нашу форму
+from .forms import PostForm  # импортируем нашу форму
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
