@@ -16,6 +16,9 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+import django
+django.setup()
+
 STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
@@ -44,10 +47,11 @@ INSTALLED_APPS = [
 
     'django.contrib.sites',
     'django.contrib.flatpages',
-    'six',
-    'django_filters',
+    'django.contrib.sites.models.Site',
+    #'six',
+    #'django_filters',
     # my apps:
-    
+    #'admin',
     'news',
     'news.templatetags',
     'sign',
