@@ -49,9 +49,9 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'django.contrib.sites.models.Site',
     #'six',
-    #'django_filters',
+    'django-filters',
     # my apps:
-    #'admin',
+    'admin',
     'news',
     'news.templatetags',
     'sign',

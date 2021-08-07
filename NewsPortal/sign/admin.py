@@ -1,3 +1,6 @@
 from django.contrib import admin
+from models import BaseRegisterForm, CommonSignupForm
 
-# Register your models here.
+admin.site.register(BaseRegisterForm)
+admin.site.register(CommonSignupForm)
+
