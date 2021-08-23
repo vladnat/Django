@@ -16,8 +16,8 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-import django
-django.setup()
+# import django
+# django.setup()
 
 STATICFILES_DIRS = [
     BASE_DIR / "static"
@@ -44,16 +44,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'django.contrib.sites',
     'django.contrib.flatpages',
-    #'django.contrib.sites.models.Site',
+
+    # 'django.contrib.sites.models.Site',
     #'six',
     'django_filters',
     # my apps:
-    #'admin',
+
     'news',
-    #'news.templatetags',
+    # 'news.templatetags',
     'sign',
 
     'allauth',
@@ -62,7 +62,7 @@ INSTALLED_APPS = [
     # ... include the providers you want to enable:
     'allauth.socialaccount.providers.google',
     'appointment',
-    #'appointment.models.Appointment',
+    # 'appointment.models.Appointment',
 ]
 
 SITE_ID = 1

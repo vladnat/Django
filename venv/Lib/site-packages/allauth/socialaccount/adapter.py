@@ -131,14 +131,11 @@ class DefaultSocialAccountAdapter(object):
                 raise ValidationError(_("Your account has no password set" " up."))
             # No email address, no password reset
             if app_settings.EMAIL_VERIFICATION == EmailVerificationMethod.MANDATORY:
-                if (
-                    EmailAddress.objects.filter(
-                        user=account.user, verified=True
-                    ).count()
-                    == 0
-                ):
+                if not EmailAddress.objects.filter(
+                    user=account.user, verified=True
+                ).exists():
                     raise ValidationError(
-                        _("Your account has no verified" " e-mail address.")
+                        _("Your account has no verified e-mail address.")
                     )
 
     def is_auto_signup_allowed(self, request, sociallogin):
