@@ -47,13 +47,13 @@ INSTALLED_APPS = [
 
     'django.contrib.sites',
     'django.contrib.flatpages',
-    'django.contrib.sites.models.Site',
+    #'django.contrib.sites.models.Site',
     #'six',
-    'django-filters',
+    'django_filters',
     # my apps:
-    'admin',
+    #'admin',
     'news',
-    'news.templatetags',
+    #'news.templatetags',
     'sign',
 
     'allauth',
@@ -62,7 +62,7 @@ INSTALLED_APPS = [
     # ... include the providers you want to enable:
     'allauth.socialaccount.providers.google',
     'appointment',
-    'appointment.models.Appointment',
+    #'appointment.models.Appointment',
 ]
 
 SITE_ID = 1
